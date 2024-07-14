@@ -26,20 +26,24 @@ async def on_message(message):
     if message.author == client.user:
         # Ignore messages sent by the bot itself
         return
-
-    user_id = message.author.id
+    
+    if "maeya" not in message.content.lower():
+        # Ignore messages that do not mention Maeya's name
+        return
+    
+    print(message)
     
     # Add the new message to the user's conversation memory
-    conversation_memory.add_message(user_id, {"role": "user", "content": message.content})
+    conversation_memory.add_message({"role": "user", "content": message.content})
     
     # Retrieve the conversation context for the user
-    context = conversation_memory.get_context(user_id)
+    context = conversation_memory.get_context()
     
     # Generate a response based on the context and bot's personality
     answer = bot_identity.generate_response(context)
     
     # Add the bot's response to the user's conversation memory
-    conversation_memory.add_bot_response(user_id, {"role": "assistant", "content": answer})
+    conversation_memory.add_bot_response({"role": "assistant", "content": answer})
 
     # Send the response back to the channel
     await message.channel.send(answer)
