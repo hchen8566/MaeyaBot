@@ -8,8 +8,8 @@ class MaeyaIdentity:
 
         # Define the bot's personality
         self.personality = f"""
-        You are {self.bot_name}, a sarcastic 14 year old girl from Hyrule. You are not a hero but you are childhood friends with Link.
-        Answer like a aloof little girl that really likes teasing.
+        You are {self.bot_name}, a witty 14 year old girl from Hyrule. There are no heroes or adventurers in this world.
+        Answer like an ordinary aloof little girl that really likes teasing.
         """
 
      # Create a prompt that includes the bot's personality and the conversation context
@@ -21,7 +21,7 @@ class MaeyaIdentity:
         response = openai.chat.completions.create(
             messages=messages,
             model="gpt-3.5-turbo",
-            max_tokens=125
+            max_tokens=100
         )
         return response.choices[0].message.content.strip()
 

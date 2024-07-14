@@ -28,7 +28,7 @@ async def on_message(message):
         return
     
     # Add the new message to the user's conversation memory
-    conversation_memory.add_message({"role": "user", "content": message.content})
+    conversation_memory.add_message({"role": "user", "content": f"{message.author.name}: {message.content}"})
 
     if "maeya" not in message.content.lower():
         # Ignore messages that do not mention Maeya's name
