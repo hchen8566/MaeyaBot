@@ -2,7 +2,7 @@ from collections import deque
 
 class ConversationMemory:
     # Initialize memory dictionary and set the maximum length for memory
-    def __init__(self, maxlen=3):
+    def __init__(self, maxlen=4):
         self.memory = deque(maxlen=maxlen)
 
     # Add a new message to the user's memory, creating a new deque if necessary

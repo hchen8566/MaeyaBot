@@ -27,17 +27,16 @@ async def on_message(message):
         # Ignore messages sent by the bot itself
         return
     
+    # Add the new message to the user's conversation memory
+    conversation_memory.add_message({"role": "user", "content": message.content})
+
     if "maeya" not in message.content.lower():
         # Ignore messages that do not mention Maeya's name
         return
     
-    print(message)
-    
-    # Add the new message to the user's conversation memory
-    conversation_memory.add_message({"role": "user", "content": message.content})
-    
     # Retrieve the conversation context for the user
     context = conversation_memory.get_context()
+    print(context) #DUBUG!!!
     
     # Generate a response based on the context and bot's personality
     answer = bot_identity.generate_response(context)
