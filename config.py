@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Getting tokens and api keys from enviroment variables
+# Getting tokens and api keys from enviroment variable
 # Passing them onto variables to be used for the Discord Bot and API
 discordToken = os.getenv('discordToken')
 apiKey = os.getenv('openAIKey')

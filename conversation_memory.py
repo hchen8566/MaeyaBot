@@ -9,7 +9,7 @@ class ConversationMemory:
     def add_message(self, message):
         self.memory.append(message)
 
-    # Get the conversation context for the user
+    # Get the conversation context for the users
     def get_context(self):
         return list(self.memory)
 

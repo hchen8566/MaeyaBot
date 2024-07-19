@@ -2,7 +2,7 @@ import openai
 
 class MaeyaIdentity:
     # Set the OpenAI API key and bot's name
-    def __init__(self, api_key, bot_name="Maeya"):
+    def __init__(self, api_key, bot_name="Maeya"):  
         openai.api_key = api_key
         self.bot_name = bot_name
 
@@ -20,8 +20,8 @@ class MaeyaIdentity:
         # Generate a response using the OpenAI API
         response = openai.chat.completions.create(
             messages=messages,
-            model="gpt-3.5-turbo",
-            max_tokens=100
+            model="gpt-4o-mini",
+            max_tokens=150
         )
         return response.choices[0].message.content.strip()
 

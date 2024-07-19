@@ -8,7 +8,7 @@ from MaeyaDetails import MaeyaIdentity
 intents = discord.Intents.default()
 intents.message_content = True
 
-# Initialize the Discord client with the specified intents
+# Initialize the Discord client with the specified intent
 client = discord.Client(intents=intents)
 
 # Initialize conversation memory and bot identity
@@ -22,7 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # Event handler for when a message is received
+    # Event handler for when a message is received 
     if message.author == client.user:
         # Ignore messages sent by the bot itself
         return
