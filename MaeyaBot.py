@@ -32,6 +32,20 @@ async def on_message(message):
         # Ignore messages sent by the bot itself
         return
     
+    # Check if the message is a command and handle music commands
+    if message.content.startswith('!'):
+        command, *args = message.content[1:].split()
+        if command == "join":
+            await music.join(message)
+        elif command == "leave":
+            await music.leave(message)
+        elif command == "play":
+            query = ' '.join(args)
+            await music.play(message, query)
+        elif command == "stop":
+            await music.stop(message)
+        return
+    
     # Add the new message to the user's conversation memory
     conversation_memory.add_message({"role": "user", "content": f"{message.author.name}: {message.content}"})
 
