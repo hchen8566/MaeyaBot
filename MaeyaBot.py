@@ -1,8 +1,10 @@
 # Importing libraries and dependencies
 import discord
-from config import discordToken, apiKey
+import config
+from config import discordToken, apiKey, spotify_id, spotify_secret
 from conversation_memory import ConversationMemory
 from MaeyaDetails import MaeyaIdentity
+from music import Music
 
 # Set up intents for the bot to receive message content
 intents = discord.Intents.default()
@@ -14,6 +16,9 @@ client = discord.Client(intents=intents)
 # Initialize conversation memory and bot identity
 conversation_memory = ConversationMemory()
 bot_identity = MaeyaIdentity(apiKey, bot_name="Maeya")
+
+# Loading music cog commands from music.py and pass in Spotify credentials
+music = Music(client, spotify_id, spotify_secret)
 
 @client.event
 async def on_ready():
@@ -36,7 +41,7 @@ async def on_message(message):
     
     # Retrieve the conversation context for the user
     context = conversation_memory.get_context()
-    print(context) #DUBUG!!!
+    #print(context) #DUBUG!!!
     
     # Generate a response based on the context and bot's personality
     answer = bot_identity.generate_response(context)
