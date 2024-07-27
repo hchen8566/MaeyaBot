@@ -1,11 +1,13 @@
 import discord
-import youtube_dl
+import yt_dlp as youtube_dl
 from spotify_integration import SpotifyIntegration
+import os
 
 class Music:
     def __init__(self, client, spotify_client_id, spotify_client_secret):
         self.client = client
         self.spotify = SpotifyIntegration(spotify_client_id, spotify_client_secret)
+        self.ffmpeg_path = os.path.join(youtube_dl.__path__[0], 'ffmpeg')
 
     async def join(self, message):
         """Joins a voice channel"""
@@ -56,9 +58,18 @@ class Music:
                 await message.channel.send("No results found on YouTube")
                 return
 
-        source = await discord.FFmpegOpusAudio.from_probe(url2)
-        message.guild.voice_client.play(source)
-        await message.channel.send(f"Now playing: {title}")
+        FFMPEG_OPTIONS = {
+            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -hide_banner -loglevel error',
+            'options': '-vn',
+            'executable': self.ffmpeg_path
+        }
+
+        try: 
+            source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
+            message.guild.voice_client.play(source)
+            await message.channel.send(f"Now playing: {title}")
+        except Exception as e:
+            await message.channel.send(f"Error playing song: {str(e)}")
 
     async def stop(self, message):
         """Stops the currently playing song"""
