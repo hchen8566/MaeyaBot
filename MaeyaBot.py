@@ -5,6 +5,7 @@ from config import discordToken, apiKey, spotify_id, spotify_secret
 from conversation_memory import ConversationMemory
 from MaeyaDetails import MaeyaIdentity
 from music import Music
+from language import Language
 
 # Set up intents for the bot to receive message content
 intents = discord.Intents.default()
@@ -19,6 +20,9 @@ bot_identity = MaeyaIdentity(apiKey, bot_name="Maeya")
 
 # Loading music cog commands from music.py and pass in Spotify credentials
 music = Music(client, spotify_id, spotify_secret)
+
+# Initialize language support
+language = Language()
 
 @client.event
 async def on_ready():
@@ -46,6 +50,17 @@ async def on_message(message):
             await music.stop(message)
         return
     
+    # Detecting language of request
+    detected_language = language.detect_language(message.content)
+    print(f"Detected language: {detected_language}")
+
+    # Translate message to English if it's not already in English
+    if detected_language != 'en':
+        translated_content = language.translate_text(message.content, 'en')
+        message_content = f"{message.author.name}: {translated_content} (translated from {detected_language})"
+    else:
+        message_content = f"{message.author.name}: {message.content}"
+    
     # Add the new message to the user's conversation memory
     conversation_memory.add_message({"role": "user", "content": f"{message.author.name}: {message.content}"})
 
@@ -60,6 +75,14 @@ async def on_message(message):
     # Generate a response based on the context and bot's personality
     answer = bot_identity.generate_response(context)
     
+
+    # Translate the response back to the detected language if necessary
+    if detected_language != 'en':
+        answer = language.translate_text(answer, detected_language)
+        response_content = f"Maeya: {answer} (translated to {detected_language})"
+    else:
+        response_content = f"Maeya: {answer}"
+
     # Add the bot's response to the user's conversation memory
     conversation_memory.add_bot_response({"role": "assistant", "content": answer})
 
